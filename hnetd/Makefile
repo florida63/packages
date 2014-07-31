@@ -7,9 +7,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=hnetd
-PKG_SOURCE_VERSION:=c6da40c19d0e550cd1e2dd1a459ef6cab9b15cae
-PKG_VERSION:=2014-06-02-$(PKG_SOURCE_VERSION)
-PKG_RELEASE:=1
+PKG_SOURCE_VERSION:=0638c10c415563376aecb2017f6503eb6c6e3a90
+PKG_VERSION:=2014-07-29-$(PKG_SOURCE_VERSION)
+PKG_RELEASE:=2
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://github.com/sbyx/hnetd.git
@@ -41,13 +41,21 @@ define Package/hnet-full
   CATEGORY:=Network
   TITLE:=HNCP Homenet metapackage
   URL:=https://github.com/sbyx/hnetd
-  DEPENDS:=+hnetd
+  DEPENDS:=+hnetd +luci-app-hnet
   # Routing
   DEPENDS+=+babels
   # Service discovery
   DEPENDS+=+ohybridproxy
   # Distributed PCP support
   DEPENDS+=+miniupnpd +minimalist-pcproxy
+endef
+
+define Package/luci-app-hnet
+  SECTION:=luci
+  CATEGORY:=LuCI
+  SUBMENU:=3. Applications
+  TITLE:=HNCP Homenet configuration and visualization
+  DEPENDS:=+hnetd
 endef
 
 define Package/hnetd/description
@@ -62,9 +70,11 @@ define Package/hnetd/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/hnetd $(1)/usr/sbin/
 	$(INSTALL_DIR) $(1)/lib/netifd/proto
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/openwrt/hnet.sh $(1)/lib/netifd/proto
-	ln -s hnetd $(1)/usr/sbin/hnet-call
+	ln -s hnetd $(1)/usr/sbin/hnet-ifresolve
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) ./files/hnetd.init $(1)/etc/init.d/hnetd
+	$(INSTALL_DIR) $(1)/etc/config
+	$(INSTALL_DATA) ./files/hnet.config $(1)/etc/config/hnet
 	$(INSTALL_BIN) ./files/ohp-script $(1)/usr/sbin/hnetd-ohp-script
 	$(INSTALL_BIN) ./files/pcp-script $(1)/usr/sbin/hnetd-pcp-script
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/generic/hnetd-routing $(1)/usr/sbin/hnetd-routing
@@ -74,6 +84,13 @@ endef
 
 define Package/hnet-full/install
 	true
+endef
+
+define Package/luci-app-hnet/install
+	$(INSTALL_DIR) $(1)/usr/lib/lua/luci
+	$(INSTALL_DIR) $(1)/www
+	$(CP) -R $(PKG_BUILD_DIR)/openwrt/luci/luasrc/* $(1)/usr/lib/lua/luci/
+	$(CP) -R $(PKG_BUILD_DIR)/openwrt/luci/htdocs/* $(1)/www/
 endef
 
 define Package/hnetd/postinst
@@ -89,3 +106,4 @@ endef
 
 $(eval $(call BuildPackage,hnetd))
 $(eval $(call BuildPackage,hnet-full))
+$(eval $(call BuildPackage,luci-app-hnet))
