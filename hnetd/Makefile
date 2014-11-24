@@ -7,13 +7,14 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=hnetd
-PKG_SOURCE_VERSION:=0638c10c415563376aecb2017f6503eb6c6e3a90
-PKG_VERSION:=2014-07-29-$(PKG_SOURCE_VERSION)
-PKG_RELEASE:=2
+PKG_SOURCE_VERSION:=0c1d55d03983c726aaad010738236c2da64ca7df
+PKG_VERSION:=2014-09-26-$(PKG_SOURCE_VERSION)
+PKG_RELEASE:=1
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=git://github.com/sbyx/hnetd.git
 PKG_MAINTAINER:=Steven Barth <cyrus@openwrt.org>
+PKG_LICENSE:=GPL-2.0
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
@@ -101,7 +102,6 @@ define Package/hnetd/postinst
 	/etc/init.d/hnetd enable
 	/etc/init.d/hnetd start
 }
-exit 0
 endef
 
 $(eval $(call BuildPackage,hnetd))

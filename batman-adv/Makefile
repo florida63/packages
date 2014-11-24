@@ -10,12 +10,13 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=batman-adv
 
-PKG_VERSION:=2014.2.0
+PKG_VERSION:=2014.3.0
 PKG_RELEASE:=1
-PKG_MD5SUM:=1243029b3a3e2f4fa721d1a59c2faaf5
+PKG_MD5SUM:=e9ee1d42ff4b0254699c779668054bed
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://downloads.open-mesh.org/batman/releases/batman-adv-$(PKG_VERSION)
+PKG_LICENSE:=GPL-2.0
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)/$(PKG_NAME)-$(PKG_VERSION)
 
@@ -40,6 +41,10 @@ endef
 
 define KernelPackage/batman-adv/config
 	source "$(SOURCE)/Config.in"
+endef
+
+define Package/kmod-batman-adv/conffiles
+/etc/config/batman-adv
 endef
 
 MAKE_BATMAN_ADV_ARGS += \
