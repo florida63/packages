@@ -1,4 +1,8 @@
+##Description
+
 This is an OpenWrt package feed containing community maintained routing packages.
+
+##Usage
 
 To use these packages, add the following line to the feeds.conf
 in the OpenWrt buildroot:
@@ -14,5 +18,3 @@ Activate the package:
   ./scripts/feeds install -a -p routing
   
 The routing packages should now appear in menuconfig.
-
-
